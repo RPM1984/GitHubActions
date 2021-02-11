@@ -5,13 +5,19 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+    
+env:
+  PROJECT_ROOT: ./src/API
+  AZURE_WEBAPP_NAME: GitHubActions
+  AZURE_WEBAPP_PACKAGE_PATH: ${{ env.PROJECT_ROOT }}
+  CONFIGURATION: Release
 
 jobs:
   build:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./src/API
+        working-directory: '${{ env.PROJECT_ROOT }}'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -20,12 +26,12 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 5.0.x
-        
-      - name: Restore dependencies
-        run: dotnet restore
-      
-      - name: Build
-        run: dotnet build --no-restore
+              
+      - name: Build & Publish
+        run: |
+          dotnet restore
+          dotnet build --configuration '${{ env.CONFIGURATION }}'
+          dotnet publish -c '${{ env.CONFIGURATION }}' -o '${{ env.AZURE_WEBAPP_PACKAGE_PATH}}/myapp'
          
       - name: Test & Generate Coverage
         run: dotnet test --no-build -v minimal --logger trx --collect:"XPlat Code Coverage" --results-directory ./coverage
@@ -33,6 +39,13 @@ jobs:
       - name: Upload to codecov.io
         uses: codecov/codecov-action@v1
         with:
-          directory: ./src/API/coverage      
+          directory: '${{ env.PROJECT_ROOT }}/coverage'   
           fail_ci_if_error: true
+          
+      - name: Deploy to Azure
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # Define secret variable in repository settings as per action documentation
+          package: '${{ env.AZURE_WEBAPP_PACKAGE_PATH }}/myapp'
    
