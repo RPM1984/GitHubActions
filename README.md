@@ -1,0 +1,1 @@
+![Build, Test & Deploy to Azure](https://github.com/RPM1984/GitHubActions/workflows/Build,%20Test%20&%20Deploy%20to%20Azure/badge.svg?branch=main)
