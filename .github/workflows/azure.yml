@@ -9,7 +9,7 @@ on:
 env:
   PROJECT_ROOT: ./src/API
   AZURE_WEBAPP_NAME: GitHubActions
-  AZURE_WEBAPP_PACKAGE_PATH: ${{ env.PROJECT_ROOT }}
+  AZURE_WEBAPP_PACKAGE_PATH: ./src/API
   CONFIGURATION: Release
 
 jobs:
