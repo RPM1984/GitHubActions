@@ -1,1 +1,2 @@
 ![Build, Test & Deploy to Azure](https://github.com/RPM1984/GitHubActions/workflows/Build,%20Test%20&%20Deploy%20to%20Azure/badge.svg?branch=main)
+[![codecov](https://codecov.io/gh/RPM1984/GitHubActions/branch/main/graph/badge.svg?token=MJiMkId6L8)](https://codecov.io/gh/RPM1984/GitHubActions)
